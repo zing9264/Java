@@ -16,13 +16,12 @@ public class Simpletron {
 
     public void display() {
         System.out.print(
-                "*** Welcome to Simpletron! ***" + '\n' +
-                        "*** Please enter your program one instruction ***" + '\n' +
-                        "*** (or data word) at a time into the input   ***" + '\n' +
-                        "*** text field. I will display the location   ***" + '\n' +
-                        "*** number and a question mark (?). You then  ***" + '\n' +
-                        "*** type the word for that location. Press the***" + '\n' +
-                        "*** Done button to stop entering your program ***" + '\n' +
+                        "*** Welcome to Simpletron! ***" + '\n' +
+                        "*** Please enter your program one instruction    ***" + '\n' +
+                        "*** (or data word) at a time. I will display     ***" + '\n' +
+                        "*** the location number and a question mark (?). ***" + '\n' +
+                        "*** You then type the word for that location.    ***" + '\n' +
+                        "*** Type -99999 to stop entering your program.   ***" + '\n' +
                         "Location" + "Instruction" + "    ****" + "*****" + '\n');
     }
 
@@ -47,12 +46,11 @@ public class Simpletron {
         System.out.print("*** Program loading completed ***\n" +
                 "*** Program excecution begins  ***\n");
 
-        for (int data : memory) {
-            if (data != 0) {
-                load();
-                execute(operationCode, operand);
-            }
+        while (true) {
+            load();
+            execute(operationCode, operand);
         }
+        //halt();
     }
 
     public void load() {
@@ -62,8 +60,11 @@ public class Simpletron {
     }
 
     public void execute(int opC, int opR) {
+       // System.out.print("Execute:"+opC+'\n'+"step:"+instructionCounter+'\n');
 
         switch (opC) {
+            case 00:
+                break;
             case 10:  // read
                 Scanner input = new Scanner(System.in);
                 System.out.print("輸入變數:");
@@ -83,7 +84,7 @@ public class Simpletron {
                 break;
             case 30: // add
                 accumulator += memory[opR];
-                if(accumulator>9999 || accumulator<-9999){
+                if(accumulator>9999 || accumulator< (-9999)){
                     fatalErrors("overflow");
                 }
                 break;
@@ -109,16 +110,16 @@ public class Simpletron {
                 }
                 break;
             case 40:// branch
-                instructionCounter= opR;
+                instructionCounter= opR-1;
                 break;
             case 41://branch neg
                 if(accumulator<0){
-                    instructionCounter=opR;
+                    instructionCounter=opR-1;
                 }
                 break;
             case 42://branch zero
                 if(accumulator==0){
-                    instructionCounter=opR;
+                    instructionCounter=opR-1;
                 }
                 break;
             case 43:// halt
